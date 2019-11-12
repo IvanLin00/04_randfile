@@ -10,6 +10,7 @@ int randint(){
   if (fd>0){
     int n = read(fd,&i,sizeof(i));
     if (n<0) return -1;
+    close("/dev/random")
     return i;
   }
   return -1;
