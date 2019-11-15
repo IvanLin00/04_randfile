@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <unistd.h>
 
 int randint(){
 	int i;
@@ -33,7 +34,7 @@ int main(){
     printf("random %d: %d\n", i, rand_arr[i]);
   }
   printf("Writing files to file...\n");
-  int fd = open("random_numbers", O_RDWR | O_CREAT, 0666);
+  int fd = open("random_numbers.txt", O_CREAT | O_TRUNC | O_WRONLY, 0644);
   if (fd < 0){
 	  printf("error %d: %s\n", errno, strerror(errno));
 	  return 0;
