@@ -1,26 +1,29 @@
-#include <unistd.h>
-#include <errno.h>
-#include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <errno.h>
 #include <fcntl.h>
 
 int randint(){
-  int i;
-  int fd = open("/dev/random",O_RDONLY);
-  if (fd>0){
-    int n = read(fd,&i,sizeof(i));
-    if (n<0){
-		printf("error %d: %s\n", errno, strerror(errno));
-		return -1;
+	int i;
+	int fd = open("/dev/random",O_RDONLY);
+	if (fd < 0){
+		printf("error number %d: %s\n",errno,strerror(errno));
+		return 0;
 	}
-    close("/dev/random");
-    return i;
-  }
-  else{
-	  printf("error %d: %s\n", errno, strerror(errno));
-	  return 0;
-  }
+	int rd = read(fd,&i,sizeof(i));
+	if (rd < 0){
+		printf("error number %d: %s\n",errno,strerror(errno));
+		return 0;
+	}
+	int cld = close(fd);
+	if (cld < 0){
+		printf("error number %d: %s\n",errno,strerror(errno));
+		return 0;
+	}
+	return i;
 }
+
 
 int main(){
   printf("Generating random numbers:\n");
@@ -35,29 +38,29 @@ int main(){
 	  printf("error %d: %s\n", errno, strerror(errno));
 	  return 0;
   }
-  fd = write(fd, rand_arr, sizeof(rand_arr));
-  if (fd < 0){
+  int wd = write(fd, rand_arr, sizeof(rand_arr));
+  if (wd < 0){
 	  printf("error %d: %s\n", errno, strerror(errno));
 	  return 0;
   }
-  fd = close("random numbers");
-  if (fd < 0){
+  int cld = close(fd);
+  if (cld < 0){
 	  printf("error %d: %s\n", errno, strerror(errno));
 	  return 0;
   }
   printf("Reading numbers from file...\n");
-  fd = open("random_numbers", O_RDONLY);
+  fd = open("random_numbers.txt", O_RDONLY);
   if (fd < 0){
 	  printf("error %d: %s\n", errno, strerror(errno));
 	  return 0;
   }
-  fd = read(fd, read_arr, sizeof(rand_arr));
-  if (fd < 0){
+  int rd = read(fd, read_arr, sizeof(rand_arr));
+  if (rd < 0){
 	  printf("error %d: %s\n", errno, strerror(errno));
 	  return 0;
   }
-  fd = close("random numbers");
-	if (fd < 0){
+  cld = close(fd);
+	if (cld < 0){
 	  printf("error %d: %s\n", errno, strerror(errno));
 	  return 0;
 	}
